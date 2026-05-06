@@ -7,7 +7,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "expenses")
+@Table(name = "expenses", indexes = {
+        @Index(name = "idx_expense_user_id", columnList = "user_id")
+})
 @Getter
 @Setter
 @NoArgsConstructor
