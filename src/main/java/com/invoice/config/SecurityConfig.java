@@ -46,8 +46,15 @@ public class SecurityConfig {
                         // /auth/register and /auth/login are public
                         // no token needed to register or login
 
-                        .requestMatchers("/swagger-ui/**",
-                                "/api-docs/**").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/index.html",
+                                "/api-docs/**",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
                         // swagger UI is public — for testing
 
                         .anyRequest().authenticated())
