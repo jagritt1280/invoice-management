@@ -15,7 +15,7 @@ import java.util.List;
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
     List<Invoice> findByUserId(Long userId);
-
+    boolean existsByInvoiceNumber(String invoiceNumber);
     List<Invoice> findByUserIdAndStatus(Long userId, InvoiceStatus status);
     @Query("SELECT COUNT(i) FROM Invoice i WHERE i.user.id = :userId")
     Long countByUserId(@Param("userId") Long userId);

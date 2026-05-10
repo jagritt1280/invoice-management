@@ -202,9 +202,13 @@ public class InvoiceService {
 
         // count existing invoices for this user + 1
         long count = invoiceRepository.countByUserId(userId) + 1;
+        String number;
+        do {
+            number = "INV-" + year + "-" + String.format("%03d", count);
+            count++;
+        } while(invoiceRepository.existsByInvoiceNumber(number));
 
-        // pad to 3 digits: 1→001, 12→012, 123→123
-        return "INV-" + year + "-" + String.format("%03d", count);
+        return number;
     }
 
     private void validateStatusTransition(InvoiceStatus current,
