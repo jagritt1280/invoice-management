@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         // /auth/register and /auth/login are public
                         // no token needed to register or login
-
+                        .requestMatchers("/api/health").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
