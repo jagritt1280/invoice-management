@@ -22,7 +22,7 @@ public class ExpenseService {
 
     private final ExpenseRepository expenseRepository;
     private final UserRepository userRepository;
-
+    private final DashboardService dashboardService;
     @Transactional
     public ExpenseResponse create(ExpenseRequest request, String userEmail) {
         User user = userRepository.findByEmail(userEmail)
@@ -38,6 +38,7 @@ public class ExpenseService {
                 .build();
 
         Expense saved = expenseRepository.save(expense);
+        dashboardService.evictDashboardCache(userEmail);
         log.info("Expense created: {} for user: {}", saved.getId(), userEmail);
         return mapToResponse(saved);
     }

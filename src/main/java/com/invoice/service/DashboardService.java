@@ -7,6 +7,8 @@ import com.invoice.repository.ExpenseRepository;
 import com.invoice.repository.InvoiceRepository;
 import com.invoice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,7 +23,7 @@ public class DashboardService {
     private final InvoiceRepository invoiceRepository;
     private final ExpenseRepository expenseRepository;
     private final UserRepository userRepository;
-
+    @Cacheable(value = "dashboard", key = "#userEmail")
     public Map<String, Object> getDashboard(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User", 0L));
@@ -80,4 +82,13 @@ public class DashboardService {
 
         return dashboard;
     }
+
+    @CacheEvict(value = "dashboard", key = "#userEmail")
+    // ↑ clears cache when called
+    // must be called whenever invoice/expense changes
+    public void evictDashboardCache(String userEmail) {
+        // empty method — just evicts cache ✅
+    }
+
+
 }

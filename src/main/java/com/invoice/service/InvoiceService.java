@@ -40,6 +40,7 @@ public class InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final ClientRepository clientRepository;
     private final UserRepository userRepository;
+    private final DashboardService dashboardService;
 
     // ─── CREATE INVOICE ───────────────────────────────────────────
 
@@ -117,6 +118,7 @@ public class InvoiceService {
         items.forEach(item -> item.setInvoice(invoice));
 
         Invoice saved = invoiceRepository.save(invoice);
+        dashboardService.evictDashboardCache(userEmail);
         // cascade = ALL means saving invoice also saves all items
         // one save call handles everything ✅
 
@@ -170,6 +172,7 @@ public class InvoiceService {
 
         invoice.setStatus(next);
         Invoice updated = invoiceRepository.save(invoice);
+        dashboardService.evictDashboardCache(userEmail);
 
         log.info("Invoice {} status updated: {} → {}", id, current, next);
         return mapToResponse(updated);
@@ -191,6 +194,7 @@ public class InvoiceService {
                     "Cannot delete a paid invoice");
 
         invoiceRepository.delete(invoice);
+        dashboardService.evictDashboardCache(userEmail);
         log.info("Invoice {} deleted by {}", id, userEmail);
     }
 
